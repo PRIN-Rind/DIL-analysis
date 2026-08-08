@@ -1,0 +1,34 @@
+LICENCE FOR THE DERIVED DATASETS
+
+The datasets in this repository — annotated chunks (chunk_annotated/), the
+labelled CSV bases, the model annotation outputs and the evaluation results —
+are released under
+
+    Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+    (CC BY-NC-SA 4.0)
+
+    https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+You are free to share and adapt this material for non-commercial purposes,
+provided you give appropriate credit, indicate whether changes were made, and
+distribute any derivative material under the same licence.
+
+
+WHY THIS LICENCE
+
+The choice follows from provenance rather than preference. These datasets
+contain passages drawn from the RIND Italian corpus, which is released under
+CC BY-NC-SA 4.0 because a substantial part of its texts derives from Liber
+Liber digitisations carrying that licence. The share-alike clause propagates
+to derivative material, and this repository is bound by it.
+
+The code is licensed separately and more permissively, under the MIT licence.
+See LICENSE.
+
+
+ATTRIBUTION
+
+    RIND Italian Corpus, produced within the research project "Reading the
+    Italian Novel at a Distance (1830-1930)" (RIND), funded under the PRIN 2022
+    programme of the Italian Ministry of University and Research (MUR).
+    https://github.com/PRIN-Rind/corpus

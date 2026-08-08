@@ -1,0 +1,40 @@
+# API keys and secrets — NEVER commit
+*.env
+!*.env.template
+.keys.env
+config.local.json
+
+# macOS
+.DS_Store
+.AppleDouble
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# editor
+.idea/
+.vscode/
+*.swp
+*~
+
+# run artefacts
+*.partial.csv
+annotation_state.json
+*.log
+logs/
