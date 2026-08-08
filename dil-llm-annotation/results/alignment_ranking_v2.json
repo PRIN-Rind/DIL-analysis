@@ -1,0 +1,38 @@
+{
+  "best_model": "GPT-5.5",
+  "best_model_kappa": 0.548,
+  "best_prompt": "Prompt C",
+  "best_prompt_kappa": 0.5064,
+  "best_per_model": {
+    "Claude Sonnet 4.6": {
+      "prompt": "Prompt C",
+      "kappa": 0.57,
+      "f1": 0.7852,
+      "accuracy": 0.785
+    },
+    "Gemini 3.5 Flash": {
+      "prompt": "Prompt C",
+      "kappa": 0.556,
+      "f1": 0.7489,
+      "accuracy": 0.778
+    },
+    "GPT-5.5": {
+      "prompt": "Prompt C",
+      "kappa": 0.558,
+      "f1": 0.7761,
+      "accuracy": 0.779
+    },
+    "GPT-OSS-120B": {
+      "prompt": "Prompt C",
+      "kappa": 0.346,
+      "f1": 0.6103,
+      "accuracy": 0.673
+    },
+    "Qwen3-35B-A3B": {
+      "prompt": "Prompt C",
+      "kappa": 0.502,
+      "f1": 0.7512,
+      "accuracy": 0.751
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# API keys — NEVER commit
+.keys.env
+*.env
+!*.env.template
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Partial annotation checkpoints
+*.partial.csv
+
+# Logs
+logs/
+
+# Editor
+.idea/
+.vscode/
+*.swp
