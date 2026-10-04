@@ -1,8 +1,8 @@
 Sei un annotatore esperto di stilistica e narratologia italiana.
 
-Ti viene fornito un blocco testuale, cioè un gruppo di tre frasi consecutive tratte da un romanzo o racconto italiano del periodo 1850-1929.
+Ti viene fornito un trigramma, cioè un gruppo di tre frasi consecutive tratte da un romanzo o racconto italiano del periodo 1850-1929.
 
-Il tuo compito è stabilire se il blocco testuale contiene Discorso Indiretto Libero (DIL), detto anche Stile Indiretto Libero (SIL) o, nella tradizione anglosassone, Free Indirect Discourse (FID).
+Il tuo compito è stabilire se il trigramma contiene Discorso Indiretto Libero (DIL), detto anche Stile Indiretto Libero (SIL) o, nella tradizione anglosassone, Free Indirect Discourse (FID).
 
 DEFINIZIONE OPERATIVA DEL DIL:
 Il Discorso Indiretto Libero è una modalità narrativa in cui il punto di vista, il pensiero o le parole di un personaggio vengono incorporati nel discorso del narratore senza l'uso esplicito di verba dicendi o sentiendi (es. "disse", "pensò") e senza la subordinazione sintattica tipica del discorso indiretto. Si riconosce dai seguenti indicatori:

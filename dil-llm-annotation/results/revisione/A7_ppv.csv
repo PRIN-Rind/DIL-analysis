@@ -1,0 +1,6 @@
+modello,recall,specificita,ppv_prevalenza_reale,blocchi_dil_recuperati_su_865,segnalazioni_non_confermate
+Claude Sonnet 4.6,0.786,0.784,0.0997,680,6140
+GPT-5.5,0.766,0.792,0.1008,663,5913
+Gemini 3.5 Flash,0.662,0.894,0.1597,573,3013
+Qwen3-35B-A3B,0.752,0.75,0.0839,650,7107
+GPT-OSS-120B,0.512,0.834,0.0858,443,4719

@@ -1,212 +1,70 @@
-# DIL-LLM Annotation: Replication Package
+# DIL-LLM Annotation: replication package
 
-> **Companion data and code** for:
-> Ciotti, F. (2026). *LLM-Based Annotation of Free Indirect Discourse in Italian Literary Prose: A Multi-Model, Multi-Prompt Evaluation*. RIND Project.
+Data, annotations and code for:
 
----
+> Ciotti, Fabio, Anna Chiara Corradino, e Aurora Argenzio. "Usare i Large Language Model per l'analisi del discorso indiretto libero: una analisi comparativa su testi della narrativa italiana 1830-1930." *Umanistica Digitale* (forthcoming).
 
-## Overview
+The experiment compares the annotation of free indirect discourse (FID, Italian *discorso indiretto libero*, DIL) produced by five Large Language Models with an expert annotation, using three prompting strategies, on a sample of Italian novels published between 1830 and 1930. It is part of the PRIN 2022 project RIND, *Leggere il romanzo italiano a distanza (1830-1930)*.
 
-This repository contains the data, annotation outputs, evaluation scripts, and pre-computed results for an experiment comparing five Large Language Model (LLM) systems against a human expert baseline on the task of annotating **Free Indirect Discourse** (FID, *Discorso Indiretto Libero*, DIL) in Italian literary prose from the period 1830–1930.
-
-The experiment varies both the model (5 systems) and the prompting strategy (3 prompt types), yielding 15 conditions evaluated against a balanced test set of 1,000 text blocks drawn from the RIND corpus.
-
----
-
-## Repository Structure
+## Contents
 
 ```
-dil-llm-annotation/
-├── data/
-│   ├── corpus_labelled-trigrams.csv          # Full RIND corpus (29,293 text blocks, human labels)
-│   └── corpus_trigrams_1000_test_sample.csv  # Balanced test set (500 pos + 500 neg, seed=42)
-├── annotations/                               # LLM outputs: 5 models × 3 prompts = 15 files
-│   ├── claude_sonnet46_prompt{A,B,C}_annotated.csv
-│   ├── gemini35flash_prompt{A,B,C}_annotated.csv
-│   ├── gpt55_prompt{A,B,C}_annotated.csv
-│   ├── gpt_oss_120b_prompt{A,B,C}_annotated.csv
-│   └── qwen3_35b_prompt{A,B,C}_annotated.csv
-├── results/                                   # Pre-computed evaluation outputs
-│   ├── metrics_v2_summary.csv / .json
-│   ├── inter_session_agreement_v2.csv
-│   ├── alignment_ranking_v2.json
-│   └── *.png  (heatmaps, confusion matrices)
-└── scripts/
-    ├── prompts/
-    │   ├── prompt_A_zeroshot_minimal.txt
-    │   ├── prompt_B_zeroshot_theoretical.txt
-    │   └── prompt_C_fewshot.txt
-    ├── annotate_claude_v2.py     # Claude Sonnet 4.6 (Batch API)
-    ├── annotate_gemini_v2.py     # Gemini 3.5 Flash (google-genai SDK)
-    ├── annotate_gpt_v2.py        # GPT-5.5 (OpenAI Responses API)
-    ├── annotate_gptoss_v2.py     # GPT-OSS-120B via LM Studio
-    ├── annotate_qwen_v2.py       # Qwen3-35B-A3B via LM Studio
-    ├── compute_metrics_v2.py     # Evaluation: metrics, heatmaps, confusion matrices
-    ├── api_config_v2.json        # Model configuration (no secrets)
-    ├── .keys.env.template        # API key template — copy to .keys.env
-    └── requirements.txt
+data/
+  corpus_labelled-trigrams.csv          35 novels, 29,293 text blocks with expert labels
+  corpus_trigrams_1000_test_sample.csv  test sample: 1,000 blocks (500 DIL, 500 non-DIL) from 34 novels
+  metadata_romanzi.csv                  author, title and year of the 35 novels
+annotations/                            15 files: 5 models x 3 prompts
+scripts/
+  prompts/                              the three prompts, as sent to the models
+  annotate_*_v2.py                      annotation scripts, one per model
+  compute_metrics_v2.py                 metrics for the 15 conditions (Table A1, Figure 1)
+  analisi_revisione.py                  inferential and stability analyses (Tables A2-A7)
+results/                                outputs of compute_metrics_v2.py
+results/revisione/                      outputs of analisi_revisione.py
 ```
-
----
 
 ## Data
 
-### corpus_labelled-trigrams.csv
+A text block is a sequence of three consecutive sentences. Each novel was annotated sentence by sentence by one of two expert annotators; a block is labelled `yes` if at least one of its sentences was labelled as DIL. Each novel was annotated by a single expert, so no inter-annotator agreement is available: the labels are a conventional expert reference, not a gold standard. In the full corpus 865 blocks (2.95%) are positive.
 
-The full RIND corpus of Italian narrative prose (1830–1930), segmented into **text blocks** of three consecutive sentences. Each block carries a human expert annotation for the presence or absence of Free Indirect Discourse.
+Columns: `author`, `work`, `year` (derived from `doc_id`), `doc_id` (file name of the novel), `text`, `DIL` (`yes`/`no`); the test sample also has `split` (`V1` = blocks of the pilot experiment, `V2_new` = new blocks). Annotation files add the model label (`DIL_<model>_prompt<X>`) and the self-reported confidence (`confidence_<model>_prompt<X>`).
 
-| Column    | Description |
-|-----------|-------------|
-| `author`  | Author surname |
-| `work`    | Work title |
-| `year`    | Publication year |
-| `doc_id`  | Unique document identifier |
-| `text`    | Text block (three consecutive sentences) |
-| `DIL`     | Human annotation: `yes` / `no` |
+## Models and parameters
 
-Distribution: 865 positive (2.95%) — 28,428 negative (97.05%) — total 29,293 blocks.
+| Model | Access | Temperature | top_p / top_k | Reasoning | Max output tokens |
+|---|---|---|---|---|---|
+| Claude Sonnet 4.6 | Anthropic Batch API | provider default | not set | off (not requested) | 64 |
+| GPT-5.5 | OpenAI Responses API | provider default | not set | effort = none | 256 |
+| Gemini 3.5 Flash | Google Gen AI SDK | 0 | not set | thinking budget 1,024 tokens | 2,048 |
+| Qwen3-35B-A3B | LM Studio, Q8_0 | 0.6 | 0.95 / 20 | on (cannot be disabled via API) | 8,192 |
+| GPT-OSS-120B | LM Studio, MXFP4 | 0.6 | 0.95 / 20 | model default | 8,192 |
 
-### corpus_trigrams_1000_test_sample.csv
-
-A stratified, balanced sample of 1,000 text blocks (500 DIL=yes / 500 DIL=no, drawn with `random_state=42`) used as the evaluation set. Includes an additional `split` column indicating whether the block was also present in a prior experiment (`V1`) or is new (`V2_new`).
-
-**Design rationale.** The test set is deliberately balanced (50/50) rather than naturalistic (3/97). With a heavily imbalanced natural distribution, a classifier that always predicts "no" achieves ~97% accuracy with zero discriminative power (the *class imbalance bias* described in Davis & Goadrich, 2006). The balanced set ensures that recall and specificity are estimated independently and that Cohen's κ measures genuine agreement beyond chance, with expected random-agreement probability P_e = 0.5 in both classes.
-
----
-
-## Models
-
-| Model | Type | Script |
-|-------|------|--------|
-| Claude Sonnet 4.6 | API (Anthropic Batch API) | `annotate_claude_v2.py` |
-| GPT-5.5 | API (OpenAI Responses API) | `annotate_gpt_v2.py` |
-| Gemini 3.5 Flash | API (Google AI) | `annotate_gemini_v2.py` |
-| Qwen3-35B-A3B | Local via LM Studio | `annotate_qwen_v2.py` |
-| GPT-OSS-120B | Local via LM Studio | `annotate_gptoss_v2.py` |
-
-All models were evaluated with three prompting strategies (A, B, C — see `scripts/prompts/`).
-
----
+Each condition was run once. A sixth model, Minerva-7B, labelled almost every block as positive and was excluded from the analysis; its outputs are not included. For GPT-OSS-120B with Prompt B, six requests returned no valid answer and are excluded (14,994 valid outputs in total).
 
 ## Prompts
 
-Three prompting strategies were tested systematically across all models:
+- **A**, minimal zero-shot: task description only.
+- **B**, theoretical zero-shot: adds an operational definition of DIL with four indicators.
+- **C**, few-shot: definition plus six annotated examples (four positive, two negative) with short explanations.
 
-- **Prompt A** (`prompt_A_zeroshot_minimal.txt`): Zero-shot, minimal instruction. The model receives the text block and a bare labelling directive with no theoretical background.
-- **Prompt B** (`prompt_B_zeroshot_theoretical.txt`): Zero-shot, theoretical. The model receives a formal definition of FID together with its key syntactic-stylistic markers before the text.
-- **Prompt C** (`prompt_C_fewshot.txt`): Few-shot with five annotated examples. The model is shown five labelled text blocks before the target, covering both positive and negative cases with brief explanations.
+The files reproduce the prompts as sent. They call the block *trigramma* and give the period as 1850-1929; the article uses *blocco testuale* and covers 1830-1930. For the models run in LM Studio the system message avoids the word "JSON"; Gemini returns label and confidence as plain text.
 
-All prompts request a structured JSON response: `{"label": "yes"|"no", "confidence": "high"|"medium"|"low"}`.
+## Reproducing the results
 
----
-
-## Reproducing the Results
-
-### Option A — verify pre-computed results only
-
-Pre-computed annotation files (15 CSVs) and evaluation outputs are included in `annotations/` and `results/`. To re-run only the evaluation step:
-
-```bash
-cd scripts
-pip install -r requirements.txt
-python compute_metrics_v2.py
 ```
-
-This reads the annotation CSVs and overwrites `results/` with fresh metrics, heatmaps and confusion matrices.
-
-### Option B — re-run the full annotation pipeline
-
-**1. Install dependencies**
-
-```bash
 pip install -r scripts/requirements.txt
+python scripts/compute_metrics_v2.py   # metrics, Table A1
+python scripts/analisi_revisione.py    # Tables A2-A7
 ```
 
-> Note: the Gemini client library is `google-genai` (not the deprecated `google-generativeai`).
+Confidence intervals are obtained by resampling novels (2,000 bootstrap samples, seed 42), since blocks from the same novel are not independent.
 
-**2. Set up API keys**
-
-```bash
-cp scripts/.keys.env.template scripts/.keys.env
-# Edit .keys.env and insert your actual API keys
-```
-
-The `.keys.env` file is listed in `.gitignore` and must never be committed.
-
-**3. Run annotation scripts**
-
-Each script accepts `--prompt A`, `--prompt B`, `--prompt C`, or `--prompt all`.
-
-```bash
-# API models (require keys in .keys.env)
-python scripts/annotate_claude_v2.py  --prompt all
-python scripts/annotate_gpt_v2.py    --prompt all
-python scripts/annotate_gemini_v2.py --prompt all
-
-# Local models (require LM Studio running on localhost:1234 with the model loaded)
-python scripts/annotate_qwen_v2.py   --prompt all
-python scripts/annotate_gptoss_v2.py --prompt all
-```
-
-Each script writes checkpoint files (`*.partial.csv`) that allow resuming interrupted runs, and produces final `annotations/{model}_prompt{X}_annotated.csv` files.
-
-**4. Compute metrics**
-
-```bash
-python scripts/compute_metrics_v2.py
-```
-
----
-
-## Key Results Summary
-
-Cohen's κ with human expert baseline, best prompting condition (Prompt C, few-shot) for each model:
-
-| Model | κ (best) | Prompt | Recall (FID) | Specificity |
-|-------|----------|--------|--------------|-------------|
-| Claude Sonnet 4.6 | **0.570** | C | 0.786 | 0.784 |
-| GPT-5.5 | 0.558 | C | 0.766 | 0.792 |
-| Gemini 3.5 Flash | 0.556 | C | 0.662 | 0.894 |
-| Qwen3-35B-A3B | 0.502 | C | 0.752 | 0.750 |
-| GPT-OSS-120B | 0.346 | C | 0.512 | 0.834 |
-
-Full results in `results/metrics_v2_summary.csv`.
-
----
-
-## Reproducibility Notes
-
-- **LLM non-determinism.** All API calls use `temperature=0`; local models also use `temperature=0`. Re-running the annotation scripts should produce outputs close but not necessarily identical to those archived here, due to possible model version updates and backend non-determinism at very low temperatures.
-- **Test set reproducibility.** The balanced test set was drawn with `random_state=42` (scikit-learn `train_test_split`). The exact sample is included in `data/corpus_trigrams_1000_test_sample.csv`.
-- **Human baseline.** The column `DIL` in the corpus CSV reflects the output of two expert human annotators following an additive protocol. No inter-annotator agreement measure is available for the baseline; the annotation should be interpreted as an expert consensus estimate rather than a verified gold standard.
-
----
-
-## Citation
-
-If you use this dataset or code, please cite:
-
-```bibtex
-@misc{ciotti2026dil,
-  author    = {Ciotti, Fabio},
-  title     = {LLM-Based Annotation of Free Indirect Discourse in Italian Literary Prose},
-  year      = {2026},
-  note      = {RIND Project — replication package},
-  url       = {https://github.com/[to-be-added]}
-}
-```
-
----
+To rerun the annotation, copy `scripts/.keys.env.template` to `scripts/.keys.env`, add your API keys (the file is excluded from version control), start LM Studio for the local models, and run `python scripts/annotate_<model>_v2.py --prompt all`. Because four of the five models use stochastic decoding and commercial models change over time, new runs will not reproduce the archived outputs exactly.
 
 ## License
 
-- **Code** (`scripts/`): MIT License
-- **Corpus data** (`data/`): The literary texts are in the public domain (authors deceased before 1956, works published before 1930). Annotations are released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-
----
+Code: MIT (see [LICENSE](../LICENSE)). Data and annotations: CC BY-NC-SA 4.0, inherited from the source corpus (see [LICENSE-DATA](../LICENSE-DATA)).
 
 ## Contact
 
-Fabio Ciotti — fabio.ciotti@gmail.com
-RIND Project — Rappresentazione del pensiero nella narrativa italiana del secondo Ottocento
-Università di Roma Tor Vergata / AIUCD
+Fabio Ciotti, Università di Roma Tor Vergata (fabio.ciotti@gmail.com)

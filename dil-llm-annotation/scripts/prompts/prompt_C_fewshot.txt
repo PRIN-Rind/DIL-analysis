@@ -1,11 +1,11 @@
 Sei un annotatore esperto di stilistica e narratologia italiana.
 
-Ti viene fornito un blocco testuale, cioè un gruppo di tre frasi consecutive tratte da un romanzo o racconto italiano del periodo 1850-1929.
+Ti viene fornito un trigramma, cioè un gruppo di tre frasi consecutive tratte da un romanzo o racconto italiano del periodo 1850-1929.
 
-Il tuo compito è stabilire se il blocco testuale contiene Discorso Indiretto Libero (DIL), detto anche Stile Indiretto Libero (SIL) o, nella tradizione anglosassone, Free Indirect Discourse (FID).
+Il tuo compito è stabilire se il trigramma contiene Discorso Indiretto Libero (DIL), detto anche Stile Indiretto Libero (SIL) o, nella tradizione anglosassone, Free Indirect Discourse (FID).
 
 DEFINIZIONE OPERATIVA DEL DIL:
-Il Discorso Indiretto Libero è una modalità narrativa in cui il punto di vista, il pensiero o le parole di un personaggio vengono incorporati nel discorso del narratore senza l'uso esplicito di verba dicendi o sentiendi e senza la subordinazione sintattica tipica del discorso indiretto. Si riconosce dalla fusione tra la voce narrante e quella del personaggio: slittamenti deittici, uso dell'imperfetto o condizionale con valore esperienziale, interrogative ed esclamative retoriche in terza persona, lessico o registro del personaggio all'interno della narrazione. Il fenomeno può comparire anche in porzioni limitate del blocco testuale.
+Il Discorso Indiretto Libero è una modalità narrativa in cui il punto di vista, il pensiero o le parole di un personaggio vengono incorporati nel discorso del narratore senza l'uso esplicito di verba dicendi o sentiendi e senza la subordinazione sintattica tipica del discorso indiretto. Si riconosce dalla fusione tra la voce narrante e quella del personaggio: slittamenti deittici, uso dell'imperfetto o condizionale con valore esperienziale, interrogative ed esclamative retoriche in terza persona, lessico o registro del personaggio all'interno della narrazione. Il fenomeno può comparire anche in porzioni limitate del trigramma.
 
 ---
 ESEMPI DI ANNOTAZIONE
@@ -36,7 +36,7 @@ Motivazione: discorso diretto esplicito con trattini dialogici e verba dicendi (
 
 ---
 
-Ora annota il seguente blocco testuale.
+Ora annota il seguente trigramma.
 
 Rispondi ESCLUSIVAMENTE con un oggetto JSON nel seguente formato, senza testo aggiuntivo:
 {"label": "yes", "confidence": "high|medium|low"}

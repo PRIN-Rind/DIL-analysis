@@ -1,0 +1,6 @@
+test,osservazioni,chi2,gl,p
+modello x prompt,tutti,20.3725,8,0.009
+modello x prompt,positivi,136.369,8,0.0
+modello x prompt,negativi,73.1841,8,0.0
+modello x periodo (prompt C),positivi,16.7132,8,0.0332
+modello x periodo (prompt C),negativi,13.0012,8,0.1118
